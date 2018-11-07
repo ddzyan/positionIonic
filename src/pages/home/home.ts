@@ -3,7 +3,6 @@ import { NavController } from "ionic-angular";
 import { Geolocation } from "@ionic-native/geolocation";
 import axios from "axios";
 import { Device } from '@ionic-native/device';
-import { ActionSheetController } from 'ionic-angular';
 
 @Component({
   selector: "page-home",
@@ -17,7 +16,6 @@ export class HomePage {
     public navCtrl: NavController,
     private geolocation: Geolocation,
     private device: Device,
-    private alertCtrl: ActionSheetController
   ) {
     this.instance = axios.create({
       baseURL: this.baseURL,
@@ -26,10 +24,10 @@ export class HomePage {
   }
 
   public getGPS(title: string): void {
-    this.geolocation
-      .getCurrentPosition()
-      .then(resp => {
-        if (title) {
+    if (title) {
+      this.geolocation
+        .getCurrentPosition()
+        .then(resp => {
           const latitude = (resp.coords.latitude).toString();
           const longitude = (resp.coords.longitude).toString();
           this.instance.post('/position', {
@@ -46,35 +44,35 @@ export class HomePage {
           }).catch(function (error) {
             alert(error.message || error);
           });
-        } else {
-          alert("请输入备注信息");
-        }
-      })
-      .catch(error => {
-        alert(error.message || error);
-      });
+        }).catch(error => {
+          alert(error.message || error);
+        });
+    } else {
+      alert("请输入备注信息");
+    }
   }
 
   public openLiveGPS(title: string): void {
-    let subscription = this.geolocation.watchPosition();
-    subscription.subscribe(data => {
-      if (title) {
+    if (title) {
+      let subscription = this.geolocation.watchPosition();
+      subscription.subscribe(data => {
         this.instance.post('/position', {
           latitude: data.coords.latitude,
-          longitude: data.coords.longitude
+          longitude: data.coords.longitude,
+          title,
+          uuid: this.device.uuid
         }).then(function (response) {
           if (response.data.code === "1000") {
             console.log(response.data);
           } else {
             console.log("上传失败");
           }
-        })
-          .catch(function (error) {
-            alert(error.message || error);
-          });
-      } else {
-        alert("请输入备注信息");
-      }
-    });
+        }).catch(function (error) {
+          alert(error.message || error);
+        });
+      });
+    } else {
+      alert("请输入备注信息");
+    }
   }
 }
