@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      定位系统
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div>
+    <p>服务器地址：{{baseURL}}</p>
+    <p>客户端版本：{{version}}</p>
+    <p>备注信息：</p>
+    <input #title>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <button ion-button (click)="getGPS(title.value)">开始上传GPS信息</button>
+  <button ion-button (click)="openLiveGPS(title.value)">开启实时传输</button>
+</ion-footer>
