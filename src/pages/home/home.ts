@@ -10,7 +10,7 @@ import { Device } from '@ionic-native/device';
 })
 export class HomePage {
   instance: any;
-  baseURL: string = 'http://124.160.96.187:28881';
+  baseURL: string = 'http://xxxxx';
   version: string = "v1.0.4";
   constructor(
     public navCtrl: NavController,
